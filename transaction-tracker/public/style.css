@@ -74,3 +74,11 @@ button:hover {
 .status span {
     color: #007bff;
 }
+
+.reset {
+    background-color: #dc3545;
+}
+
+.reset:hover {
+    background-color: #c82333;
+}

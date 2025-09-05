@@ -14,18 +14,19 @@
             <canvas id="progressChart"></canvas>
         </div>
         <div class="controls">
-            <label for="goal">Set Transaction Goal ($):</label>
+            <label for="goal">Set Transaction Goal (₦):</label>
             <input type="number" id="goal" placeholder="e.g., 500000">
 
-            <label for="dailyAmount">Enter Daily Amount ($):</label>
+            <label for="dailyAmount">Enter Daily Amount (₦):</label>
             <input type="number" id="dailyAmount" placeholder="e.g., 5000">
 
             <button id="updateButton">Update Progress</button>
+            <button id="resetButton" class="reset">Reset Progress</button>
         </div>
         <div class="status">
-            <p>Goal: $<span id="currentGoal">0</span></p>
-            <p>Current Progress: $<span id="currentProgress">0</span></p>
-            <p>Remaining: $<span id="remaining">0</span></p>
+            <p>Goal: ₦<span id="currentGoal">0</span></p>
+            <p>Current Progress: ₦<span id="currentProgress">0</span></p>
+            <p>Remaining: ₦<span id="remaining">0</span></p>
         </div>
     </div>
 

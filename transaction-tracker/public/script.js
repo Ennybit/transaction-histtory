@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentGoalSpan = document.getElementById('currentGoal');
     const currentProgressSpan = document.getElementById('currentProgress');
     const remainingSpan = document.getElementById('remaining');
+    const resetButton = document.getElementById('resetButton');
 
     let totalProgress = 0;
     let transactionGoal = 0;
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     max: 1000000,
                     title: {
                         display: true,
-                        text: 'Amount ($)'
+                        text: 'Amount (₦)'
                     }
                 },
                 y: {
@@ -54,6 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // --- New: Reset Function ---
+    const resetProgress = () => {
+        totalProgress = 0;
+        transactionGoal = 0;
+
+        // Save the reset values to the database
+        saveProgress();
+
+        // Update the UI
+        updateChartAndUI();
+
+        // Optionally, clear the input fields
+        goalInput.value = '';
+        dailyAmountInput.value = '';
+    };
 
     // --- NEW: Function to load saved data ---
     const loadProgress = async () => {
@@ -115,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     updateButton.addEventListener('click', updateProgress);
+    resetButton.addEventListener('click', resetProgress);
 
     // Call loadProgress when the page first loads
     loadProgress();
