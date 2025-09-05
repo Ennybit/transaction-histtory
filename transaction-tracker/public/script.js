@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scales: {
                 x: {
                     stacked: true,
-                    max: 1000000,
+                    // max: 1000000,
                     title: {
                         display: true,
                         text: 'Amount (₦)'
