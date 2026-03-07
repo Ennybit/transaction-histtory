@@ -1,0 +1,394 @@
+<!DOCTYPE html><html lang="en"><head>
+      <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+      <title>index.js — My Project</title>
+      <style>
+    @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #161616;
+      --border: #1f1f1f;
+      --border2: #2a2a2a;
+      --accent: #ffffff;
+      --accent-dim: rgba(255,255,255,0.08);
+      --accent-hover: rgba(255,255,255,0.04);
+      --text: #ededed;
+      --text2: #a1a1a1;
+      --text3: #666666;
+      --blue: #4d9ef7;
+      --green: #3ecf8e;
+      --orange: #f7934d;
+      --purple: #a78bfa;
+      --red: #f87171;
+      --code-bg: #0d0d0d;
+      --sidebar-w: 248px;
+      --radius: 6px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 15px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Geist', 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin: 40px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin: 18px 0 6px;
+      letter-spacing: 0.01em;
+    }
+    p { font-size: 0.9rem; line-height: 1.75; color: var(--text2); margin: 6px 0; }
+    li { font-size: 0.9rem; line-height: 1.75; color: var(--text2); margin-left: 18px; }
+    strong { color: var(--text); font-weight: 600; }
+
+    a { color: var(--text); text-decoration: none; }
+    a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--border2); }
+
+    /* ── Code ── */
+    code {
+      font-family: 'Geist Mono', 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.8em;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--text);
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 14px 0;
+      position: relative;
+    }
+    pre::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text2);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+      z-index: 100;
+      padding-bottom: 40px;
+      scrollbar-width: none;
+    }
+    .sidebar::-webkit-scrollbar { display: none; }
+
+    .sidebar-logo {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .sidebar-logo-mark {
+      width: 20px; height: 20px;
+      background: var(--text);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .sidebar-logo span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-section {
+      padding: 20px 20px 6px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text3);
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 5px 12px;
+      margin: 1px 8px;
+      font-size: 0.82rem;
+      color: var(--text3);
+      border-radius: 5px;
+      transition: color 0.1s, background 0.1s;
+      line-height: 1.4;
+    }
+    .sidebar a:hover { color: var(--text); background: var(--accent-hover); text-decoration: none; }
+    .sidebar a.active { color: var(--text); background: var(--accent-dim); }
+
+    .sidebar .dir-label {
+      padding: 12px 20px 4px;
+      font-size: 0.63rem;
+      color: var(--border2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Main content ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      max-width: 820px;
+      padding: 52px 60px 80px;
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      font-size: 0.75rem;
+      color: var(--text3);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .breadcrumb span { color: var(--border2); }
+
+    /* ── File overview callout ── */
+    .file-overview {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text2);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .file-overview::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 100%;
+      background: var(--text3);
+    }
+
+    /* ── Export cards ── */
+    .export-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 12px 0;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .export-card:hover { border-color: var(--border2); }
+
+    .export-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .export-name {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .export-body { padding: 16px 18px; }
+    .export-body > p { margin-bottom: 12px; }
+
+    .signature {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text2);
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      margin: 10px 0;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    /* ── Param table ── */
+    .param-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .param-table th {
+      text-align: left;
+      padding: 8px 14px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      color: var(--text3);
+      font-weight: 600;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .param-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text2);
+    }
+    .param-table tr:last-child td { border-bottom: none; }
+    .param-table td:first-child { font-family: 'Geist Mono', monospace; color: var(--text); font-size: 0.78rem; }
+    .param-table td:nth-child(2) { font-family: 'Geist Mono', monospace; color: var(--blue); font-size: 0.78rem; }
+
+    /* ── Tags / badges ── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: 'Geist Mono', monospace;
+    }
+    .tag-function { background: rgba(77,158,247,0.1); color: var(--blue); border: 1px solid rgba(77,158,247,0.2); }
+    .tag-class { background: rgba(62,207,142,0.1); color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+    .tag-constant { background: rgba(167,139,250,0.1); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+    .tag-type { background: rgba(247,147,77,0.1); color: var(--orange); border: 1px solid rgba(247,147,77,0.2); }
+    .tag-interface { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+    /* ── Dep badges ── */
+    .dep-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .dep-badge {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.72rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text3);
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+
+    /* ── Hero stats ── */
+    .hero-stats { display: flex; gap: 1px; margin: 28px 0; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .stat {
+      background: var(--surface);
+      padding: 18px 24px;
+      flex: 1;
+    }
+    .stat-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2rem;
+      color: var(--text);
+      line-height: 1;
+      font-weight: 400;
+    }
+    .stat-label { font-size: 0.72rem; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ── Lang badge ── */
+    .lang-badge {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 500;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text3);
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; padding: 32px 24px; }
+    }
+  </style>
+    </head><body>
+      
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-mark">◆</div>
+        <span>My Project</span>
+      </div>
+      <div class="sidebar-section">Overview</div>
+      <a href="index.html" >Introduction</a>
+      <a href="getting-started.html" >Getting Started</a>
+      
+      <div class="sidebar-section">API Reference</div>
+      
+      <div class="dir-label">transaction-tracker/api</div>
+      <a href="api-transaction_tracker_api_index_js.html" class="active">index.js</a>
+    
+      <div class="dir-label">transaction-tracker/public</div>
+      <a href="api-transaction_tracker_public_script_js.html" >script.js</a>
+    
+    </div>
+      <div class="main">
+        <div class="breadcrumb">Home <span>›</span> API Reference <span>›</span> transaction-tracker/api › index.js</div>
+        <h1>index.js <span class="lang-badge">JavaScript</span></h1>
+        <div class="file-overview">Documentation could not be generated.</div>
+        
+        
+        <p style='color:var(--muted)'>No notable exports found in this file.</p>
+      </div>
+    </body></html>
