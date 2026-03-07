@@ -1,1 +1,42 @@
+name: Generate AI Documentation
 
+on:
+  push:
+    branches:
+      - main        # Only runs when pushing to main
+  workflow_dispatch: # Also allows manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install @anthropic-ai/sdk glob
+
+      - name: Generate documentation
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node .github/scripts/generate-docs.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs-site
+          commit_message: "docs: auto-update documentation [skip ci]"
