@@ -87,24 +87,41 @@ File path: ${filePath}
 ${content}
 \`\`\`
 
-Respond ONLY with a valid JSON object (no markdown, no backticks) with this exact structure:
+First, determine what KIND of file this is by looking at its contents and path:
+- BACKEND/MODULE: has exports, module.exports, classes, utility functions
+- FRONTEND/BROWSER: has DOM manipulation, event listeners, fetch calls, UI logic
+- API ROUTE/HANDLER: has route handlers (app.get, router.post, express routes, etc.)
+- CONFIG: has configuration objects or environment setup
+- REACT/VUE/COMPONENT: has JSX, components, or UI framework code
+- SCRIPT/CLI: has top-level procedural or scripted code
+
+Based on the file type, populate "exports" with whatever is most meaningful:
+- Backend/modules: exported functions and classes
+- Frontend scripts: all named functions, event handlers, and key behaviors (NEVER return empty even if no exports keyword)
+- API routes: each route with its method, path, and purpose
+- React/Vue components: the component with its props and behavior
+- Config files: the config keys and their purpose
+- Scripts: the main actions the script performs
+
+Respond ONLY with a valid JSON object (no markdown, no backticks):
 {
   "overview": "1-2 sentence description of what this file does",
+  "fileType": "backend|frontend|api-route|config|react-component|script|other",
   "exports": [
     {
-      "name": "functionOrClassName",
-      "type": "function|class|constant|type|interface",
-      "signature": "full signature string",
+      "name": "functionOrRouteOrComponentName",
+      "type": "function|class|constant|route|component|handler|event",
+      "signature": "full signature, route path, or component name with props",
       "description": "what it does",
       "params": [{"name": "param", "type": "type", "description": "what it is"}],
-      "returns": {"type": "type", "description": "what is returned"},
+      "returns": {"type": "type", "description": "what is returned or rendered"},
       "example": "short usage example"
     }
   ],
-  "dependencies": ["list", "of", "key", "imports"],
+  "dependencies": ["list", "of", "key", "imports or external resources used"],
   "notes": "any important notes, gotchas, or usage guidance"
 }
-If there are no notable exports, return an empty array for "exports".`;
+IMPORTANT: Always populate exports with something meaningful. If a file has no traditional exports, document its functions, behaviors, routes, or side effects instead. Only return an empty exports array if the file is completely empty or only contains comments.`;
 
   try {
     const response = await client.messages.create({
